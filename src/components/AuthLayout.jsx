@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import WorldMap from './WorldMap.jsx'
 import BrandPanel from './BrandPanel.jsx'
 import Logo from './Logo.jsx'
@@ -42,7 +43,15 @@ function Particles() {
 
 function CookieConsent({ onAccept }) {
   return (
-    <div className="cookiebar" role="region" aria-label="Aviso de cookies">
+    <motion.div
+      className="cookiebar"
+      role="region"
+      aria-label="Aviso de cookies"
+      initial={{ y: '125%', opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: '125%', opacity: 0 }}
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+    >
       <div className="cookiebar__inner">
         <span className="cookiebar__icon" aria-hidden="true">
           <IconCookie />
@@ -64,7 +73,7 @@ function CookieConsent({ onAccept }) {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -85,7 +94,7 @@ export default function AuthLayout({ children }) {
     setCookieOpen(false)
   }
   return (
-    <div className={`app${cookieOpen ? ' app--cookiebar' : ''}`}>
+    <div className="app">
       <div className="bg" aria-hidden="true">
         <div className="bg__grid" />
         <div className="bg__glow bg__glow--1" />
@@ -131,7 +140,9 @@ export default function AuthLayout({ children }) {
         <div className="legal__meta">CNPJ 63.320.977/0001-06</div>
       </footer>
 
-      {cookieOpen && <CookieConsent onAccept={acceptCookies} />}
+      <AnimatePresence>
+        {cookieOpen && <CookieConsent onAccept={acceptCookies} />}
+      </AnimatePresence>
     </div>
   )
 }
